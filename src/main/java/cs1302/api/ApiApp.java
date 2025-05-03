@@ -48,13 +48,15 @@ public class ApiApp extends Application {
     Scene scene;
     VBox root;
     HBox battleHBox;
-    Battle pokeBattle;
     Text battleBanner;
     Button startButton;
     PokePanel panel1;
     PokePanel panel2;
 
     HBox intendedRoot;
+
+
+
 
 
 
@@ -111,14 +113,11 @@ public class ApiApp extends Application {
 
         //initializes battle start button.
         this.startButton = new Button("Start Battle!");
-
         startButton.setDisable(true);
 
         this.battleBanner = new Text();
 
-        HBox.setHgrow(temp, Priority.ALWAYS);
-
-        temp.getChildren().addAll(battleBanner, startButton);
+        temp.getChildren().addAll(startButton, battleBanner);
 
         return temp;
 
@@ -295,6 +294,7 @@ public class ApiApp extends Application {
 
         //what happens when you click on the search button
         EventHandler<ActionEvent> temp = event  -> {
+            startButton.setDisable(true);
             panel.pokeSearch.setProgress(-1);
 
             runNow(() -> {
@@ -308,9 +308,17 @@ public class ApiApp extends Application {
                     //makes sure everything is usuable to be loaded
                     try {
                         tCard =  pokeCardResult(panel.searchBar.getText());
+
+
+
                     } catch (Exception e) {
-                        Platform.runLater(() -> panel.pokeSearch.setProgress(0));
-                        alertError(e, "No Valid Card for Term.");
+                        Platform.runLater(() -> {
+                                panel.pokeSearch.setProgress(0);
+                                alertError(e, "No Valid Card for Term.");
+                            }
+                        );
+
+
                         return;
                     }
 
@@ -318,8 +326,12 @@ public class ApiApp extends Application {
                         tDex = dexInfoResponse(tCard);
                         panel.setPokemon(tCard, tDex);
                     } catch (Exception e) {
-                        Platform.runLater(() -> panel.pokeSearch.setProgress(0));
-                        alertError(e, "Term provides incompatible card.");
+                        Platform.runLater(() -> {
+                                panel.pokeSearch.setProgress(0);
+                                alertError(e, "Term provides incompatible card.");
+                            }
+                        );
+
                         return;
                     }
 
@@ -343,10 +355,11 @@ public class ApiApp extends Application {
     public ApiApp() {
         root = new VBox();
         intendedRoot = new HBox(20);
-        panel1 = new PokePanel();
-        panel2 = new PokePanel();
         battleHBox = battleHBoxBuilder();
-        pokeBattle = new Battle(panel1, panel2, battleBanner);
+        panel1 = new PokePanel(battleBanner, startButton);
+        panel2 = new PokePanel(battleBanner, startButton);
+
+
 
     } // ApiApp
 
@@ -362,6 +375,11 @@ public class ApiApp extends Application {
         //setup buttons
         panel1.searchButton.setOnAction(searchHandler(panel1));
         panel2.searchButton.setOnAction(searchHandler(panel2));
+
+        //set panels against each other
+        panel1.setTarget(panel2);
+        panel2.setTarget(panel1);
+
 
         // setup scene
         intendedRoot.getChildren().addAll(panel1.root, panel2.root);
@@ -387,7 +405,8 @@ public class ApiApp extends Application {
      * @param errorMessage the message to accompany the error that occured
      */
     private void alertError(Throwable cause, String errorMessage) {
-
+        System.out.println(cause);
+        cause.printStackTrace();
         TextArea text = new TextArea("Cause:" + cause.toString() + ": " + errorMessage);
         text.setEditable(false);
         Alert alert = new Alert(AlertType.ERROR);
