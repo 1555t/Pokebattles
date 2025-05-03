@@ -13,6 +13,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -33,10 +35,54 @@ public class PokePanel {
     TextField searchBar;
     Button searchButton;
     ImageView pokeSprite;
+    Image givenSprite;
     ScrollPane moveList;
     VBox moveVBox;
     ArrayList<Button> battleButtons;
     ProgressBar pokeSearch;
+    ProgressBar healthBar;
+    Pokemon currentPokemon;
+    PokePanel target;
+
+
+
+
+    /** loads the image of the currentPokemon. */
+    private void loadImage () {
+        if (currentPokemon != null) {
+            try {
+                givenSprite = new Image(currentPokemon.pokeSprite);
+                pokeSprite.setImage(givenSprite);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e);
+                givenSprite = new Image("file:resources/icons/missingNo");
+                pokeSprite.setImage(givenSprite);
+            }
+        }
+
+
+    }
+
+
+    /**
+     * Sets pokemon of the panel.
+     * @param dex the pokedex entry to get info from
+     * @param card the PokeCard to get info from
+     *
+     */
+    public void setPokemon(PokeCard card, DexInfo dex) {
+        currentPokemon = new Pokemon(card, dex);
+        loadCry();
+        loadImage();
+        Platform.runLater(() -> {
+                pokeSearch.setProgress(1);
+            }
+        );
+        playCry();
+
+
+
+    }
 
 
 
@@ -89,6 +135,14 @@ public class PokePanel {
     }
 
 
+    /**
+     * Sets the target for the panel to attack.
+     * @param panel is the target panel to attack
+     */
+    public void setTarget (PokePanel panel) {
+        this.target = panel;
+
+    } //setTarget
 
     /**
      * Default constructor for PokePanel.
@@ -107,7 +161,7 @@ public class PokePanel {
         pokeSprite.setFitHeight(150);
 
         this.moveList = moveListBuilder();
-
+        this.healthBar = new ProgressBar(100);
         this.pokeSearch = new ProgressBar(0);
 
         VBox.setVgrow(root, Priority.ALWAYS);
