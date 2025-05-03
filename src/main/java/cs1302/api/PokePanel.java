@@ -128,7 +128,7 @@ public class PokePanel {
     public void setPokemon(PokeCard card, DexInfo dex) {
         try {
             currentPokemon = new Pokemon(card, dex);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
         loaded = true;
@@ -163,7 +163,7 @@ public class PokePanel {
 
 
     /**
-     * Enables the battling button
+     * Enables the battling button.
      */
     public void enableBattle () {
         if (startButton != null) {
@@ -173,7 +173,7 @@ public class PokePanel {
     }
 
     /**
-     * Enables attacking and disables searching
+     * Enables attacking and disables searching.
      */
     public void enableAttacks () {
         disableSearch();
@@ -184,7 +184,7 @@ public class PokePanel {
     }
 
     /**
-     * Disables attacking and enables searching
+     * Disables attacking and enables searching.
      */
     public void disableAttacks () {
         enableSearch();
@@ -200,7 +200,7 @@ public class PokePanel {
      */
     private void updateHealth () {
         healthText.setText("HP: " + currentPokemon.currentHp);
-        healthBar.setProgress((double) currentPokemon.currentHp/ currentPokemon.maxHp);
+        healthBar.setProgress((double) currentPokemon.currentHp / currentPokemon.maxHp);
 
         //loses when health is 0 or below
         if (currentPokemon.currentHp <= 0) {
@@ -265,7 +265,7 @@ public class PokePanel {
      * Loads a move based off of Ability.
      * @param move
      */
-    private void loadMove(Ability move){
+    private void loadMove(Ability move) {
         VBox tempVBox = moveBuilder(move);
 
         //adds move to moveVBox
@@ -303,8 +303,7 @@ public class PokePanel {
 
     /**
      * Creates an area with move description and info.
-     *
-     * @returns HBox with created move info and button
+     * @return HBox with created move info and button
      */
     private HBox moveBuilder () {
         return null;
@@ -312,7 +311,7 @@ public class PokePanel {
 
     /**
      * Tells whether or not a pokemon's info is loaded into the panel.
-     * @returns value of {@code loaded}
+     * @return value of {@code loaded}
      */
     public boolean isLoaded () {
         return loaded;
@@ -335,7 +334,7 @@ public class PokePanel {
 
     /**
      * Builds the searchLayer.
-     * @returns the assembled searchLayer as an hbox.
+     * @return the assembled searchLayer as an hbox.
      */
     private HBox searchLayerBuilder () {
         HBox temp = new HBox();
@@ -390,6 +389,8 @@ public class PokePanel {
 
     /**
      * Default constructor for PokePanel.
+     * @param banner the Battle Banner text
+     * @param battleStarter the button to start and quit battle
      */
     public PokePanel(Text banner, Button battleStarter) {
         this.loaded = false;
@@ -418,6 +419,7 @@ public class PokePanel {
                                    healthLayer,moveList, pokeSearch);
 
     }
+
     /**
      * Resets card to default values.
      */

@@ -6,7 +6,7 @@ public class Ability {
     int damage;
 
     /**
-     * Determines whether or not a move damages
+     * Determines whether or not a move damages.
      * @return true or false for the check
      */
     public boolean isUsuable() {

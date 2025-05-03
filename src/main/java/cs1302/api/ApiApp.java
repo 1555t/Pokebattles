@@ -61,8 +61,8 @@ public class ApiApp extends Application {
 
 
     /**
-     *
-     *
+     * Runs a thread of runnable e.
+     * @param e runnable to be ran
      */
     private void runNow(Runnable e) {
         Thread t = new Thread(e);
@@ -71,7 +71,7 @@ public class ApiApp extends Application {
     }
 
     /**
-     * Formats a given string to utf-8 format
+     * Formats a given string to utf-8 format.
      * @param given the String to be formatted
      * @return  The String formatted
      */
@@ -79,7 +79,10 @@ public class ApiApp extends Application {
         //uses URL encoder to turn given string to UTF
         String term = URLEncoder.encode(given, StandardCharsets.UTF_8);
         return term.trim();
-    };
+
+    }
+
+    ;
 
     /** HTTP client. */
     public static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
@@ -137,7 +140,9 @@ public class ApiApp extends Application {
     private DexInfo dexInfoResponse (PokeCard card) {
         DexInfo tempDexInfo = null;
 
-        if (card == null || card.dexId == null) { throw new NullPointerException(); }
+        if (card == null || card.dexId == null) {
+            throw new NullPointerException();
+        }
 
         int entryNo = card.dexId[0];
 
@@ -160,7 +165,7 @@ public class ApiApp extends Application {
 
 
     /**
-     * Searches for pokedex entry
+     * Searches for pokedex entry.
      * @param req the HTTPREQUEST used to search.
      * @return pokedex info
      */
